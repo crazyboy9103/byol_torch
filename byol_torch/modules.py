@@ -30,10 +30,11 @@ def tsne_plot(embeddings, labels, filename, num_classes = 10):
     plt.figure(1, figsize=(8, 8))
     for lab in range(num_classes):
         indices = labels == lab
-        plt.scatter(tsne_proj[indices,0],tsne_proj[indices,1], c=np.array(cmap(lab)).reshape(1,4), label = lab, alpha=1)
+        plt.scatter(tsne_proj[indices,0],tsne_proj[indices,1], c=np.array(cmap(lab)).reshape(1,4), label = lab, alpha=0.5)
     
     plt.legend(markerscale=1)
     plt.savefig(filename, dpi=800)
+    plt.clf()
 
 class AverageMeter():
     def __init__(self):
