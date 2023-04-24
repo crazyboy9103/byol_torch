@@ -21,18 +21,19 @@ def Classifier_loss(preds, labels):
 ###########
 # Helpers #
 ###########
-def tsne_plot(embeddings, labels, filename, num_classes = 10):
+def tsne_plot(embeddings, labels, filename, classes):
     # Create a two dimensional t-SNE projection of the embeddings
-    tsne = TSNE(2, verbose=1)
+    tsne = TSNE(n_components=2, random_state=0, verbose=1)
     tsne_proj = tsne.fit_transform(embeddings)
     # Plot those points as a scatter plot and label them based on the pred labels
     cmap = cm.get_cmap('tab20')
     plt.figure(1, figsize=(8, 8))
-    for lab in range(num_classes):
-        indices = labels == lab
-        plt.scatter(tsne_proj[indices,0],tsne_proj[indices,1], c=np.array(cmap(lab)).reshape(1,4), label = lab, alpha=0.5)
+
+    for i, label in enumerate(classes):
+        indices = labels == i
+        plt.scatter(tsne_proj[indices,0],tsne_proj[indices,1], c=np.array(cmap(i)).reshape(1,4), label = label, alpha=0.5)
     
-    plt.legend(markerscale=1)
+    plt.legend(markerscale=1, )
     plt.savefig(filename, dpi=800)
     plt.clf()
 

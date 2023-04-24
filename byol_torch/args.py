@@ -15,8 +15,8 @@ def args_parser():
 
     parser.add_argument("--base_tau",    type=float,  default=4e-3)
     parser.add_argument('--base_lr',     type=float,  default=1e-3)
-    parser.add_argument('--epochs',      type=int,    default=10)
-    parser.add_argument('--batch_size',  type=int,    default=512)
+    parser.add_argument('--epochs',      type=int,    default=100)
+    parser.add_argument('--batch_size',  type=int,    default=1024)
 
     # mlp
     parser.add_argument("--output_dim",  type=int,    default=512)
@@ -38,4 +38,4 @@ def args_parser():
     parser.add_argument('--linear_epoch', type=int,   default=5)
 
     
-    return parser.parse_args() 
+    return parser.parse_args(args=[]) 

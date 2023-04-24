@@ -52,6 +52,7 @@ if __name__ == '__main__':
 
         # Training 
         for epoch in range(args.epochs):
+            best_loss = 1e23
             train_loss = AverageMeter()
 
             online_network = online_network.train()
@@ -100,10 +101,19 @@ if __name__ == '__main__':
                 embeddings,
                 classes, 
                 image_name,
-                10 if args.dataset == "CIFAR10" else 100
+                data_manager.test_set.classes
             )
+
+            curr_loss = train_loss.avg()
+
+            if curr_loss < best_loss:
+                filename, rest = args.ckpt_path.split(".pth")
+                filename = filename + "_" + epoch
+                best_loss = curr_loss
+                torch.save(online_network.state_dict(), filename + ".pth" + rest)
+
             wandb_log = {
-                "train_loss": train_loss.avg(), 
+                "train_loss": curr_loss, 
                 "tsne": [wandb.Image(image_name)],
                 "epoch": epoch,
             }
@@ -112,7 +122,7 @@ if __name__ == '__main__':
             log_writer.log(wandb_log)
 
 
-            torch.save(online_network.state_dict(), args.ckpt_path)
+            
     
     
     elif args.type == "linear":
@@ -123,7 +133,7 @@ if __name__ == '__main__':
 
         linear_layer = LinearClassifier(online_network.embedding_dim, 10 if args.dataset == "CIFAR10" else 100)
         linear_layer.requires_grad_(True)
-        linear_opt = optim.SGD(linear_layer.parameters(), lr=lr, momentum=0.9, nesterov=True)
+        linear_opt = optim.SGD(linear_layer.parameters(), lr=args.linear_lr, momentum=0.9, nesterov=True)
         
         # data manager
         data_manager = DataManager(args)
