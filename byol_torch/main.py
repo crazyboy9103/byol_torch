@@ -108,7 +108,7 @@ if __name__ == '__main__':
 
             if curr_loss < best_loss:
                 filename, rest = args.ckpt_path.split(".pth")
-                filename = filename + "_" + epoch
+                filename = filename + f"_{epoch}"
                 best_loss = curr_loss
                 torch.save(online_network.state_dict(), filename + ".pth" + rest)
 
